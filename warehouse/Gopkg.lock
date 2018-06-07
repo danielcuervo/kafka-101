@@ -2,12 +2,6 @@
 
 
 [[projects]]
-  branch = "master"
-  name = "github.com/Pallinder/go-randomdata"
-  packages = ["."]
-  revision = "b073033ef5a7c42a3f188393575a0850919777a6"
-
-[[projects]]
   name = "github.com/Shopify/sarama"
   packages = ["."]
   revision = "35324cf48e33d8260e1c7c18854465a904ade249"
@@ -20,10 +14,10 @@
   version = "v2.1.13"
 
 [[projects]]
-  branch = "master"
   name = "github.com/danielcuervo/kafka-101"
   packages = ["kafka"]
-  revision = "52397c882ee94a93c37f868f81f051e9533c406a"
+  revision = "b389abeeef2697a7d267b5f44ba4dae2a843856b"
+  version = "1"
 
 [[projects]]
   name = "github.com/davecgh/go-spew"
@@ -73,9 +67,21 @@
   packages = ["."]
   revision = "e2704e165165ec55d062f5919b4b29494e9fa790"
 
+[[projects]]
+  branch = "master"
+  name = "github.com/samuel/go-zookeeper"
+  packages = ["zk"]
+  revision = "c4fab1ac1bec58281ad0667dc3f0907a9476ac47"
+
+[[projects]]
+  branch = "master"
+  name = "github.com/wvanbergen/kazoo-go"
+  packages = ["."]
+  revision = "f72d8611297a7cf105da904c04198ad701a60101"
+
 [solve-meta]
   analyzer-name = "dep"
   analyzer-version = 1
-  inputs-digest = "ceb437d14f1a1d1db53bfc2138d1cf6b86f3cc9d27bb571370fab3fecb3f8ee1"
+  inputs-digest = "6e9db53bb631b66a5305c5d57c2a0e3bb77d717f8085bc4b8882a2af96f3da86"
   solver-name = "gps-cdcl"
   solver-version = 1

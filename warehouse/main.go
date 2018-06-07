@@ -5,7 +5,6 @@ import (
     "fmt"
     "log"
     "net/http"
-    "os"
 
     "github.com/danielcuervo/kafka-101/kafka"
 )
@@ -21,8 +20,8 @@ func main() {
     ctxt, cancelFunc := context.WithCancel(context.Background())
     defer cancelFunc()
 
-    groupID, _ := os.Hostname()
-    go client.Consume("order.received", 0, groupID, ctxt)
+    groupID := "singlegroup"
+    go client.Consume("order.received", groupID, ctxt)
 
     go setUpServer()
 

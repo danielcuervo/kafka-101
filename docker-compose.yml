@@ -24,8 +24,54 @@ services:
     ports:
       - "80"
 
-  kafka:
-    image: spotify/kafka
+  zookeeper:
+    image: confluentinc/cp-zookeeper:latest
     ports:
       - "2181:2181"
-      - "9092:9092"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+     - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry
+    depends_on:
+      - kafka
+      - zookeeper
+    ports:
+      - "8081"
+    environment:
+      SR_KAFKASTORE_CONNECTION_URL: "zookeeper:2181"
+
+  kafka-rest:
+    image: confluentinc/cp-kafka-rest:latest
+    depends_on:
+      - kafka
+    ports:
+      - "8082:8082"
+    environment:
+      RP_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      RP_SCHEMA_REGISTRY_URL: "http://schema-registry:8081"
+      KAFKA_REST_ZOOKEEPER_CONNECT: "zookeeper:2181"
+      KAFKA_REST_LISTENERS: "http://kafka-rest:8082"
+      KAFKA_REST_HOST_NAME: "kafka-rest"
+
+  kafka-ui:
+    image: landoop/kafka-topics-ui
+    depends_on:
+      - kafka-rest
+    ports:
+      - "8000:8000"
+    environment:
+      KAFKA_REST_PROXY_URL: "http://kafka-rest:8082"
+      PROXY: "true"

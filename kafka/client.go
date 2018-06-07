@@ -45,12 +45,14 @@ func (kc *kafkaClient) Receive() <-chan Message {
     return kc.receivedMsg
 }
 
-func (kc *kafkaClient) Consume(topic string, partition int32, groupID string, ctx context.Context) error {
+func (kc *kafkaClient) Consume(topic string, groupID string, ctx context.Context) error {
+    config := cluster.NewConfig()
+    config.Group.PartitionStrategy = cluster.StrategyRoundRobin
     consumer, err := cluster.NewConsumer(
         []string{kc.address},
         groupID,
         []string{topic},
-        cluster.NewConfig(),
+        config,
     )
     if err != nil {
         log.Println(err)
@@ -79,7 +81,9 @@ func (kc *kafkaClient) Consume(topic string, partition int32, groupID string, ct
 }
 
 func (kc *kafkaClient) Dispatch(msg Message) error {
-    producer, err := sarama.NewAsyncProducer([]string{kc.address}, sarama.NewConfig())
+    config := sarama.NewConfig()
+    config.Producer.Partitioner = sarama.NewRoundRobinPartitioner
+    producer, err := sarama.NewAsyncProducer([]string{kc.address}, config)
     if err != nil {
         return err
     }
