@@ -42,6 +42,7 @@ func receiveOrder(rw http.ResponseWriter, r *http.Request) {
 }
 
 type OrderReceived struct {
+    payload map[string]interface{}
 }
 
 func (or *OrderReceived) Topic() string {
@@ -49,12 +50,16 @@ func (or *OrderReceived) Topic() string {
 }
 
 func (or *OrderReceived) Payload() map[string]interface{} {
-    return map[string]interface{}{
-        "userId": rand.Intn(10),
-        "itemsSKU": []string{
-            randomdata.RandStringRunes(10),
-            randomdata.RandStringRunes(10),
-        },
-        "comment": "This is an order",
+    if len(or.payload) == 0 {
+        or.payload = map[string]interface{}{
+            "userId": rand.Intn(10),
+            "itemsSKU": []string{
+                randomdata.RandStringRunes(10),
+                randomdata.RandStringRunes(10),
+            },
+            "comment": "This is an order",
+        }
     }
+
+    return or.payload
 }
